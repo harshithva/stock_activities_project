@@ -7,9 +7,7 @@ db = Database('store.db')
 
 def populate_list(self):
     # delete all
-    for i in self.treeview1.get_children():
-        self.treeview1.delete(i)
-    # populate
+    for i in self.treeview1.delete(0, END)
     for row in db.fetch():
         self.treeview1.insert("", 'end',
                               values=row)
