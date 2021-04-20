@@ -1,6 +1,7 @@
 import tkinter as tk
 import tkinter.ttk as ttk
 from db import Database
+from tkinter import messagebox
 from datetime import datetime
 
 db = Database('store.db')
@@ -118,13 +119,13 @@ class ActivitesApp:
         populate_list(self)
 
     def record(self):
-          if self.date_entry.get() == '':
-        messagebox.showerror('Required Fields', 'Please include all fields')
-        return
+        if self.date_entry.get() == '' or self.symbol_entry.get() == '' or self.transaction_type_combobox.get() == '' or self.quantity_entry.get() == '' or self.price_entry.get() == '':
+            messagebox.showerror(
+                'Required Fields', 'Please include all fields')
+            return
 
         db.insert(self.date_entry.get(), self.symbol_entry.get(),
                   self.transaction_type_combobox.get(), self.quantity_entry.get(), self.price_entry.get())
-        print("done")
         populate_list(self)
 
     def clear(self):
@@ -135,7 +136,15 @@ class ActivitesApp:
         self.price_entry.delete('0', 'end')
 
     def search(self):
-        print("search")
+        # delete all
+        for i in self.treeview1.get_children():
+            self.treeview1.delete(i)
+         # populate
+        for row in db.search(self.date_entry.get(), self.symbol_entry.get(),
+                             self.transaction_type_combobox.get(), self.quantity_entry.get(), self.price_entry.get()):
+            self.treeview1.insert("", 'end',
+                                  values=row)
+            print(row)
 
     def run(self):
         self.mainwindow.mainloop()

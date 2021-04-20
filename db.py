@@ -28,14 +28,13 @@ class Database:
                          (date, symbol, t_type, qty, price))
         self.conn.commit()
 
-    def remove(self, id):
-        self.cur.execute("DELETE FROM activities WHERE id=?", (id,))
+    def search(self, date, symbol, t_type, qty, price):
+        query = f"SELECT * FROM activities WHERE date='{date}' AND symbol='{symbol}' AND t_type='{t_type}' AND qty='{qty}' AND price='{price}'"
+        print(query)
+        self.cur.execute(query)
         self.conn.commit()
-
-    def update(self, id, part, customer, retailer, price):
-        self.cur.execute("UPDATE activities SET part = ?, customer = ?, retailer = ?, price = ? WHERE id = ?",
-                         (part, customer, retailer, price, id))
-        self.conn.commit()
+        rows = self.cur.fetchall()
+        return rows
 
     def __del__(self):
         self.conn.close()
