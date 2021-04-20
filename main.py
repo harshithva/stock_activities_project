@@ -118,6 +118,10 @@ class ActivitesApp:
         populate_list(self)
 
     def record(self):
+          if self.date_entry.get() == '':
+        messagebox.showerror('Required Fields', 'Please include all fields')
+        return
+
         db.insert(self.date_entry.get(), self.symbol_entry.get(),
                   self.transaction_type_combobox.get(), self.quantity_entry.get(), self.price_entry.get())
         print("done")
