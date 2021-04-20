@@ -5,6 +5,16 @@ from db import Database
 db = Database('store.db')
 
 
+def populate_list(self):
+    # delete all
+    for i in self.treeview1.get_children():
+        self.treeview1.delete(i)
+    # populate
+    for row in db.fetch():
+        self.treeview1.insert("", 'end',
+                              values=row)
+
+
 class ActivitesApp:
     def __init__(self, master=None):
         # build ui
@@ -62,11 +72,12 @@ class ActivitesApp:
         self.search_button.configure(text='Search')
         self.search_button.grid(column='2', columnspan='3', row='3')
         self.search_button.configure(command=self.search)
+
         self.treeview1 = ttk.Treeview(self.frame2)
         self.treeview1_cols = ['column1', 'column2',
-                               'column3', 'column4', 'column5']
+                               'column3', 'column4', 'column5', 'column6']
         self.treeview1_dcols = ['column1', 'column2',
-                                'column3', 'column4', 'column5']
+                                'column3', 'column4', 'column5', 'column6']
         self.treeview1.configure(
             columns=self.treeview1_cols, displaycolumns=self.treeview1_dcols)
         self.treeview1.column('column1', anchor='w',
@@ -79,18 +90,22 @@ class ActivitesApp:
                               stretch='true', width='200', minwidth='20')
         self.treeview1.column('column5', anchor='w',
                               stretch='true', width='200', minwidth='20')
-        self.treeview1.heading('column1', anchor='w', text='Date')
-        self.treeview1.heading('column2', anchor='w', text='Symbol')
-        self.treeview1.heading('column3', anchor='w', text='Transaction Type')
-        self.treeview1.heading('column4', anchor='w', text='Quantity')
-        self.treeview1.heading('column5', anchor='w', text='Price')
+        self.treeview1.heading('column1', anchor='w', text='ID')
+        self.treeview1.heading('column2', anchor='w', text='Date')
+        self.treeview1.heading('column3', anchor='w', text='Symbol')
+        self.treeview1.heading('column4', anchor='w', text='Transaction Type')
+        self.treeview1.heading('column5', anchor='w', text='Quantity')
+        self.treeview1.heading('column6', anchor='w', text='Price')
         self.treeview1.grid(column='0', columnspan='5', row='4')
+
         self.frame2.configure(height='480', width='640')
         self.frame2.pack(side='top')
         self.toplevel1.configure(height='200', width='200')
 
         # Main widget
         self.mainwindow = self.toplevel1
+
+        populate_list(self)
 
     def record(self):
         print("Record")
