@@ -9,7 +9,7 @@ class Database:
             "CREATE TABLE IF NOT EXISTS activities (id INTEGER PRIMARY KEY, date text, symbol text, t_type text, qty text, price text)")
         self.conn.commit()
 
-    def fakeData():
+    def fakeData(self):
         db = Database('store.db')
         db.insert("2021-04-20", "AMZN", "SELL", "10", "200")
         db.insert("2021-04-19", "AMZN", "BUY", "30", "478")
@@ -30,11 +30,52 @@ class Database:
 
     def search(self, date, symbol, t_type, qty, price):
         query = f"SELECT * FROM activities WHERE date='{date}' AND symbol='{symbol}' AND t_type='{t_type}' AND qty='{qty}' AND price='{price}'"
-        print(query)
         self.cur.execute(query)
         self.conn.commit()
         rows = self.cur.fetchall()
         return rows
+
+    def oldest_transaction_date(self):
+        query = "SELECT MIN(date), symbol FROM activities"
+        self.cur.execute(query)
+        self.conn.commit()
+        row = self.cur.fetchall()
+        return row
+
+    def newest_transaction_date(self):
+        query = "SELECT MAX(date), symbol FROM activities"
+        self.cur.execute(query)
+        self.conn.commit()
+        row = self.cur.fetchall()
+        return row
+
+    def get_unique_stock_symbols(self):
+        query = "SELECT DISTINCT symbol FROM activities"
+        self.cur.execute(query)
+        self.conn.commit()
+        row = self.cur.fetchall()
+        return row
+
+    def get_cheapest_stock(self):
+        query = "SELECT symbol, MIN(price) FROM activities"
+        self.cur.execute(query)
+        self.conn.commit()
+        row = self.cur.fetchall()
+        return row
+
+    def get_expensive_stock(self):
+        query = "SELECT symbol, MAX(price) FROM activities"
+        self.cur.execute(query)
+        self.conn.commit()
+        row = self.cur.fetchall()
+        return row
+
+    def get_most_traded_stock(self):
+        query = "SELECT  `symbol`, COUNT(`symbol`) AS `value_occurrence` FROM  `activities` GROUP BY `symbol` ORDER BY `value_occurrence` DESC LIMIT 1"
+        self.cur.execute(query)
+        self.conn.commit()
+        row = self.cur.fetchall()
+        return row
 
     def __del__(self):
         self.conn.close()
