@@ -91,7 +91,7 @@ class SummaryApp:
         Helper.getData(self)
 
     def export(self):
-        Helper.save_csv(self)
+        Helper.export(self)
 
     def openActivitiesWindow(self):
         ActivitesApp()

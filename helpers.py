@@ -32,13 +32,13 @@ class Helper:
         # Expensive stock
         expensive_stock = db.get_expensive_stock()[0]
         self.expensive_stock_label.config(
-            text=f"Cheapest stock: {expensive_stock[0]} (Price - ${expensive_stock[1]})")
+            text=f"Expensive stock: {expensive_stock[0]} (Price - ${expensive_stock[1]})")
         # Most Traded stock
         most_traded_stock = db.get_most_traded_stock()[0]
         self.most_traded_stock_label.config(
             text=f"Most traded stock: {most_traded_stock[0]} ({most_traded_stock[1]} times)")
 
-    def save_csv(self):
+    def export(self):
         text_file = open("stock_activity.txt", "w")
         for row in db.fetch():
             line = ' '.join(str(x) for x in row)
