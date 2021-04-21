@@ -4,6 +4,8 @@ from db import Database
 from tkinter import messagebox
 from datetime import datetime
 
+# from main import SummaryApp
+
 db = Database('store.db')
 
 
@@ -144,7 +146,6 @@ class ActivitesApp:
                              self.transaction_type_combobox.get(), self.quantity_entry.get(), self.price_entry.get()):
             self.treeview1.insert("", 'end',
                                   values=row)
-            print(row)
 
     def run(self):
         self.mainwindow.mainloop()
